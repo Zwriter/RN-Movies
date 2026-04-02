@@ -14,14 +14,18 @@
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <h1>Hello, Bootstrap!</h1>
-        <p class="lead">Your Laravel app is up and running.</p>
-        <a href="#" class="btn btn-primary">Get Started</a>
+    <div class="container mt-5 text-center">
+        <h1>Movies</h1>
     </div>
 
     <div class="container mt-5">
-        <livewire:counter />
+        <div class="row">
+            @foreach(\App\Models\Movie::all() as $movie)
+                <div class="col-md-3 mb-4">
+                    <livewire:movie-post-card :movie="$movie" :key="$movie->id" />
+                </div>
+            @endforeach
+        </div>
     </div>
 
     @livewireScripts
