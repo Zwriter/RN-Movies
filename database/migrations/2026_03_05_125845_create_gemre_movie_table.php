@@ -4,24 +4,21 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
-    /**
-     * Run the migrations.
-     */
+return new class extends Migration {
     public function up(): void
     {
-        Schema::create('gemre_movie', function (Blueprint $table) {
+        Schema::create('genre_movie', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('movieID');
+            $table->unsignedBigInteger('genreID');
+            $table->foreign('movieID')->references('id')->on('movies')->onDelete('cascade');
+            $table->foreign('genreID')->references('id')->on('genres')->onDelete('cascade');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('gemre_movie');
+        Schema::dropIfExists('genre_movie');
     }
 };
