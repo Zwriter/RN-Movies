@@ -12,12 +12,12 @@ return new class extends Migration {
             $table->unsignedBigInteger('user');
             $table->integer('rating');
             $table->text('review');
-            $table->unsignedBigInteger('movieID');
+            $table->unsignedBigInteger('movie_id');
             $table->foreign('user')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('movieID')->references('id')->on('movies')->onDelete('cascade');
+            $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
             $table->timestamps();
 
-            $table->index(['user', 'movieID']);
+            $table->index(['user', 'movie_id']);
         });
     }
 

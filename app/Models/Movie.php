@@ -19,7 +19,7 @@ class Movie extends Model
         'favorites', 
         'plot', 
         'posterURI', 
-        'directorID'
+        'director_id'
     ];
 
     protected static function boot()
@@ -39,9 +39,14 @@ class Movie extends Model
         });
     }
 
+    public function getRatingAttribute()
+    {
+        return $this->reviews->avg('rating') ?? 0;
+    }
+
     public function genres()
     {
-        return $this->belongsToMany(Genre::class,'genre-movie');
+        return $this->belongsToMany(Genre::class,'genre_movie');
     }
 
     public function reviews()
@@ -51,7 +56,7 @@ class Movie extends Model
 
     public function people()
     {
-        return $this->belongsToMany(Person::class,'movie-person');
+        return $this->belongsToMany(Person::class,'movie_person');
     }
 
     public function poster()

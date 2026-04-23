@@ -21,7 +21,7 @@ class Person extends Model
 
     public function movies()
     {
-         return $this->belongsToMany(Movie::class,'movie-person');
+         return $this->belongsToMany(Movie::class,'movie_person');
     }
 
     public function images()

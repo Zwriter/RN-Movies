@@ -11,10 +11,11 @@
                 @endif
             </p>
             <p class="text-muted">{{ $movie->year }} · {{ $movie->runtime }} min</p>
+            <p class="text-muted">⭐ {{ round($movie->rating, 1) }} / 5</p>
             <button wire:click="toggleContent" class="btn btn-secondary btn-sm">
                 {{ $showFullContent ? 'Show Less' : 'Read More' }}
             </button>
-            <a href="/movies/{{ $movie->slug }}" class="btn btn-primary btn-sm">View</a>
+            <a href="{{ route('movies.show', $movie) }}" class="btn btn-primary btn-sm">View</a>
         </div>
     </div>
 </div>
