@@ -1,8 +1,4 @@
 <div>
-    <!-- <div class="container mt-5 text-center mb-4">
-        <h1>Top Rated Movies</h1>
-    </div> -->
-
     <div id="topRatedCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             @foreach($movies as $index => $movie)
