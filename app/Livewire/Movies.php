@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
 use App\Models\Genre as GenreModel;
 use App\Models\Movie as MovieModel;
@@ -24,6 +25,7 @@ class Movies extends Component
     public function updatingFilterYear(): void { $this->resetPage(); }
     public function updatingSortBy(): void { $this->resetPage(); }
 
+    #[Layout('layouts.app')]
     public function render()
     {
         [$column, $direction] = explode('_', $this->sortBy, 2);
@@ -37,11 +39,16 @@ class Movies extends Component
             ->when($this->filterGenre, fn($q) => $q->whereRelation('genres', 'genre_id', '=', $this->filterGenre))
             ->when($this->filterYear, fn($q) => $q->where('movies.year', $this->filterYear))
             ->groupBy('movies.id')
-            ->when($this->filterRating, fn($q) => $q->having('avg_rating', '>=', $this->filterRating))
+            ->when($this->filterRating, fn($q) => $q->having('avg_rating', '>=', (int)$this->filterRating))
             ->when(
-                $column === 'rating',
-                fn($q) => $q->orderBy('avg_rating', $direction),
-                fn($q) => $q->orderBy($column === 'name' ? 'movies.title' : 'movies.year', $direction)
+                $this->filterRating,
+                fn($q) => $q->orderBy('avg_rating', 'asc')
+            )
+            ->when(
+                !$this->filterRating,
+                fn($q) => $column === 'rating'
+                    ? $q->orderBy('avg_rating', $direction)
+                    : $q->orderBy($column === 'name' ? 'movies.title' : 'movies.year', $direction)
             )
             ->paginate(12);
 

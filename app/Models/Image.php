@@ -16,16 +16,16 @@ class Image extends Model
 
     public function person()
     {
-        return $this->belongsToOne(Person::class);
+        return $this->hasMany(Person::class, 'imageURL');
     }
 
     public function movie()
     {
-        return $this->belongsToOne(Movie::class);
+        return $this->hasMany(Movie::class, 'poster_id');
     }
 
     public function genre()
     {
-        return $this->belongsToOne(Genre::class);
+        return $this->hasMany(Genre::class, 'posterURL');
     }
 }

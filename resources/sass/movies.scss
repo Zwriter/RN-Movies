@@ -1,0 +1,46 @@
+// Search Field
+#movie-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+    opacity: 1;
+}
+
+// Dark placeholder
+input::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+    opacity: 1;
+}
+
+// Fix dropdown arrow color on dark selects
+select option {
+    background-color: #1a1a2e;
+    color: #fff;
+}
+
+// Pagination dark styling
+.pagination .page-link {
+    background-color: #2a2a3e;
+    border-color: #444;
+    color: #fff;
+
+    &:hover {
+        background-color: #f5c518;
+        color: #000;
+        border-color: #f5c518;
+    }
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #f5c518;
+    border-color: #f5c518;
+    color: #000;
+}
+
+.pagination .page-item.disabled .page-link {
+    background-color: #1a1a2e;
+    border-color: #333;
+    color: #555;
+}
+
+body {
+    padding-top: 63px;
+}

@@ -26,6 +26,6 @@ class Person extends Model
 
     public function images()
     {
-        return $this->hasMany(Image::class);
+        return $this->belongsTo(Image::class, 'imageURL');
     }
 }

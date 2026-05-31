@@ -2,11 +2,21 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Ensure the in-memory test database has schema and seed data
+        $this->artisan('migrate');
+        $this->artisan('db:seed');
+    }
     /**
      * A basic test example.
      */

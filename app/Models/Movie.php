@@ -14,12 +14,12 @@ class Movie extends Model
         'title',
         'slug',
         'excerpt',
-        'year', 
-        'runtime', 
-        'favorites', 
-        'plot', 
-        'posterURI', 
-        'director_id'
+        'year',
+        'runtime',
+        'favorites',
+        'plot',
+        'poster_id',
+        'director_id',
     ];
 
     protected static function boot()
@@ -39,9 +39,14 @@ class Movie extends Model
         });
     }
 
+    public function getAvgRatingAttribute()
+    {
+        return $this->reviews()->avg('rating') ?? 0;
+    }
+
     public function getRatingAttribute()
     {
-        return $this->reviews->avg('rating') ?? 0;
+        return $this->avg_rating;
     }
 
     public function genres()
@@ -61,7 +66,12 @@ class Movie extends Model
 
     public function poster()
     {
-        return $this->hasOne(Image::class);
+        return $this->belongsTo(Image::class, 'poster_id');
+    }
+
+    public function getPosterURIAttribute()
+    {
+        return optional($this->poster)->URL ?? '';
     }
 
     public function getRouteKeyName()

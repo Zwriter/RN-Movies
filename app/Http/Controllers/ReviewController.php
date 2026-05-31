@@ -2,63 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Movie;
+use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function store(Request $request, Movie $movie)
     {
-        //
+        $data = $request->validate([
+            'rating' => ['required', 'integer', 'min:1', 'max:5'],
+            'review' => ['required', 'string', 'min:10', 'max:2000'],
+        ]);
+
+        $user = $request->user();
+
+        $existingReview = Review::where('movie_id', $movie->id)
+            ->where('user', $user->id)
+            ->first();
+
+        if ($existingReview) {
+            return back()->with('status', 'You have already posted a review and cannot modify it.');
+        }
+
+        Review::create([
+            'movie_id' => $movie->id,
+            'user' => $user->id,
+            'rating' => $data['rating'],
+            'review' => $data['review'],
+        ]);
+
+        return back()->with('status', 'Your review has been posted.');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function destroy(Movie $movie, Review $review)
     {
-        //
-    }
+        if ($review->movie_id !== $movie->id || $review->user !== Auth::id()) {
+            abort(403);
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        $review->delete();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return back()->with('status', 'Your review has been removed.');
     }
 }

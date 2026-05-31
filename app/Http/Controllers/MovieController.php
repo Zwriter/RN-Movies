@@ -2,63 +2,69 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Movie;
 use Illuminate\Http\Request;
 
 class MovieController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function toggleWatchlist(Request $request, Movie $movie)
     {
-        //
+        $user = $request->user();
+        $status = $user->movieStatus($movie);
+
+        if ($status && $status->pivot->watchlist) {
+            $user->movies()->updateExistingPivot($movie->id, ['watchlist' => false]);
+
+            return back()->with('status', 'Removed from your watchlist.');
+        }
+
+        $user->movies()->syncWithoutDetaching([
+            $movie->id => [
+                'watchlist' => true,
+            ],
+        ]);
+
+        return back()->with('status', 'Added to your watchlist.');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function toggleFavorite(Request $request, Movie $movie)
     {
-        //
+        $user = $request->user();
+        $status = $user->movieStatus($movie);
+
+        if ($status && $status->pivot->favorite) {
+            $user->movies()->updateExistingPivot($movie->id, ['favorite' => false]);
+
+            return back()->with('status', 'Removed from favorites.');
+        }
+
+        $user->movies()->syncWithoutDetaching([
+            $movie->id => [
+                'favorite' => true,
+            ],
+        ]);
+
+        return back()->with('status', 'Added to favorites.');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function markWatched(Request $request, Movie $movie)
     {
-        //
-    }
+        $user = $request->user();
+        $status = $user->movieStatus($movie);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        if ($status && $status->pivot->watched) {
+            $user->movies()->updateExistingPivot($movie->id, ['watched' => false]);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+            return back()->with('status', 'Removed from watched history.');
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        $user->movies()->syncWithoutDetaching([
+            $movie->id => [
+                'watched' => true,
+                'watchlist' => false,
+            ],
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return back()->with('status', 'Marked as watched.');
     }
 }

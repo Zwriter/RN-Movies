@@ -13,7 +13,7 @@ class Movie extends Component
 
     public function mount(MovieModel $movie)
     {
-        $this->movie = $movie;
+        $this->movie = $movie->load(['reviews.user']);
     }
 
     public function toggleContent(): void
