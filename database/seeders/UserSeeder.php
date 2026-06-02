@@ -10,7 +10,6 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create or update admin user (idempotent)
         User::updateOrCreate(
             ['email' => 'admin@example.com'],
             [
@@ -21,10 +20,8 @@ class UserSeeder extends Seeder
             ]
         );
 
-        // Create regular users
-        User::factory(10)->create();
+        User::factory(200)->create();
 
-        // Create specific test user (idempotent)
         User::updateOrCreate(
             ['email' => 'john@example.com'],
             [

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Genre;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class GenreController extends Controller
 {
@@ -29,7 +30,9 @@ class GenreController extends Controller
             'img' => 'nullable|string|max:255',
         ]);
 
-        Genre::create($data);
+        $genre = Genre::create($data);
+
+        Log::info('Admin created genre', ['genre_id' => $genre->id, 'genre' => $genre->genre, 'admin_id' => auth()->id()]);
 
         return redirect()->route('admin.genres.index')->with('status', 'Genre created successfully.');
     }
@@ -50,12 +53,16 @@ class GenreController extends Controller
 
         $genre->update($data);
 
+        Log::info('Admin updated genre', ['genre_id' => $genre->id, 'genre' => $genre->genre, 'admin_id' => auth()->id()]);
+
         return redirect()->route('admin.genres.index')->with('status', 'Genre updated successfully.');
     }
 
     public function destroy(Genre $genre)
     {
         $genre->delete();
+
+        Log::warning('Admin deleted genre', ['genre_id' => $genre->id, 'admin_id' => auth()->id()]);
 
         return back()->with('status', 'Genre deleted successfully.');
     }

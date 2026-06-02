@@ -8,6 +8,7 @@ use App\Models\Image;
 use App\Models\Movie;
 use App\Models\Person;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MovieController extends Controller
 {
@@ -47,6 +48,8 @@ class MovieController extends Controller
         $movie = Movie::create($data);
         $movie->genres()->sync($data['genres'] ?? []);
 
+        Log::info('Admin created movie', ['movie_id' => $movie->id, 'title' => $movie->title, 'admin_id' => auth()->id()]);
+
         return redirect()->route('admin.movies.index')->with('status', 'Movie created successfully.');
     }
 
@@ -78,12 +81,16 @@ class MovieController extends Controller
         $movie->update($data);
         $movie->genres()->sync($data['genres'] ?? []);
 
+        Log::info('Admin updated movie', ['movie_id' => $movie->id, 'title' => $movie->title, 'admin_id' => auth()->id()]);
+
         return redirect()->route('admin.movies.index')->with('status', 'Movie updated successfully.');
     }
 
     public function destroy(Movie $movie)
     {
         $movie->delete();
+
+        Log::warning('Admin deleted movie', ['movie_id' => $movie->id, 'admin_id' => auth()->id()]);
 
         return back()->with('status', 'Movie deleted successfully.');
     }

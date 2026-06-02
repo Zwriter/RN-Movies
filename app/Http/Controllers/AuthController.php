@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
@@ -23,10 +24,13 @@ class AuthController extends Controller
         ]);
 
         if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+            Log::warning('Login failed for user', ['email' => $request->email, 'ip' => $request->ip()]);
             return back()->withErrors(['email' => 'Invalid credentials provided.'])->onlyInput('email');
         }
 
         $request->session()->regenerate();
+
+        Log::info('User logged in', ['user_id' => Auth::id(), 'email' => $request->email, 'ip' => $request->ip()]);
 
         return redirect()->intended(route('movies.index'));
     }
@@ -55,6 +59,8 @@ class AuthController extends Controller
             'is_admin' => false,
         ]);
 
+        Log::info('User registered', ['user_id' => $user->id, 'email' => $user->email, 'name' => $user->name, 'ip' => $request->ip()]);
+
         Auth::login($user);
 
         return redirect()->route('movies.index');
@@ -62,7 +68,10 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        $userId = Auth::id();
         Auth::logout();
+
+        Log::info('User logged out', ['user_id' => $userId, 'ip' => $request->ip()]);
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();

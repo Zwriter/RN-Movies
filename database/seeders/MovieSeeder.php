@@ -10,9 +10,8 @@ class MovieSeeder extends Seeder
 {
     public function run(): void
     {
-        Movie::factory(20)->create();
+        Movie::factory(200)->create();
         
-        // Attach genres to movies
         $movies = Movie::all();
         $genres = Genre::all();
         

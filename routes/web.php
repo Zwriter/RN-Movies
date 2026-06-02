@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MovieSearchController;
 use App\Http\Controllers\GenreController;
@@ -12,6 +11,7 @@ use App\Http\Controllers\Admin\MovieController as AdminMovieController;
 use App\Http\Controllers\Admin\GenreController as AdminGenreController;
 use App\Http\Controllers\Admin\ReviewController as AdminReviewController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\LogViewerController;
 
 Route::get('/', \App\Livewire\Welcome::class)->name('movies.top-rated');
 
@@ -43,6 +43,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/logs', [LogViewerController::class, 'index'])->name('logs');
 
     Route::resource('movies', AdminMovieController::class)->except(['show']);
     Route::resource('genres', AdminGenreController::class)->except(['show']);

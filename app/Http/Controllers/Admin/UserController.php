@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -34,16 +35,21 @@ class UserController extends Controller
             'is_admin' => $request->has('is_admin'),
         ]);
 
+        Log::info('Admin updated user', ['user_id' => $user->id, 'updated_by' => auth()->id()]);
+
         return redirect()->route('admin.users.index')->with('status', 'User updated successfully.');
     }
 
     public function destroy(User $user)
     {
         if (auth()->id() === $user->id) {
+            Log::warning('Self-delete attempt blocked', ['user_id' => $user->id, 'actor_id' => auth()->id()]);
             return back()->with('status', 'You cannot delete your own account from here.');
         }
 
         $user->delete();
+
+        Log::warning('Admin deleted user', ['user_id' => $user->id, 'deleted_by' => auth()->id()]);
 
         return back()->with('status', 'User deleted successfully.');
     }

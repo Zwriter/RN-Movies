@@ -6,6 +6,7 @@ use App\Models\Movie;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ReviewController extends Controller
 {
@@ -23,15 +24,18 @@ class ReviewController extends Controller
             ->first();
 
         if ($existingReview) {
+            Log::warning('Duplicate review attempt', ['movie_id' => $movie->id, 'user_id' => $user->id]);
             return back()->with('status', 'You have already posted a review and cannot modify it.');
         }
 
-        Review::create([
+        $review = Review::create([
             'movie_id' => $movie->id,
             'user' => $user->id,
             'rating' => $data['rating'],
             'review' => $data['review'],
         ]);
+
+        Log::info('Review created', ['movie_id' => $movie->id, 'review_id' => $review->id, 'user_id' => $user->id, 'rating' => $review->rating]);
 
         return back()->with('status', 'Your review has been posted.');
     }
@@ -43,6 +47,7 @@ class ReviewController extends Controller
         }
 
         $review->delete();
+        Log::info('Review deleted', ['movie_id' => $movie->id, 'review_id' => $review->id, 'user_id' => Auth::id()]);
 
         return back()->with('status', 'Your review has been removed.');
     }

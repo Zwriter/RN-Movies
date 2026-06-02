@@ -15,7 +15,7 @@ class ReviewSeeder extends Seeder
         $users = User::all();
 
         foreach ($movies as $movie) {
-            Review::factory(rand(3, 8))->create([
+            Review::factory(rand(45, 65))->create([
                 'movie_id' => $movie->id,
                 'user' => $users->random()->id,
             ]);
