@@ -25,17 +25,25 @@ RN-Movies is a Laravel-based movie discovery and review application built with L
 - Docker and Docker Compose for local development
 
 ## Photos
-
+### Database Schema
 ![RN-Movies Database Schema](./resources/images/database_schema.png)
+### Home page
 ![RN-Movies Home](./resources/images/home_1.png)
-![RN-Movies Home](./resources/images/home_2.png)
+![RN-Movies Home 2](./resources/images/home_2.png)
+### Movies Page
 ![RN-Movies Movies](./resources/images/movies.png)
+### Movie Page
 ![RN-Movies Movie](./resources/images/movie_1.png)
-![RN-Movies Movie](./resources/images/movie_2.png)
+![RN-Movies Movie 2](./resources/images/movie_2.png)
+-Genres Page
 ![RN-Movies Genres](./resources/images/genres.png)
+###Login Page
 ![RN-Movies Login](./resources/images/login.png)
+### Register Page
 ![RN-Movies Register](./resources/images/register.png)
+### Profile Page
 ![RN-Movies Profile](./resources/images/profile.png)
+### Admin Dashbard
 ![RN-Movies Admin Dashboard](./resources/images/admin_dashboard1.png)
 ![RN-Movies Admin Dashboard 2](./resources/images/admin_dashboard2.png)
 
