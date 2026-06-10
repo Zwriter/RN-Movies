@@ -21,7 +21,7 @@ RN-Movies is a Laravel-based movie discovery and review application built with L
 - Livewire for reactive UI components
 - Blade templates for server-rendered views
 - MySQL / database supported by Laravel Eloquent ORM
-- Tailwind CSS / frontend styling assets
+- Bootstrap SCSS / frontend styling assets
 - Docker and Docker Compose for local development
 
 ## Photos
